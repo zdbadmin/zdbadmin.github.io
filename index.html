@@ -1,1 +1,62 @@
-hello word!
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="微信转盘,有奖转盘,龙潭虎穴" />
+<meta name="description" content="龙潭虎穴" />
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'/> 
+<meta name=”format-detection” content=”telephone=no” /><!--禁用iphone自动将数字串转化为电话-->
+<meta http-equiv="X-UA-Compatible" content="IE=8"> 
+<title>幸运大转盘-jQuery+PHP实现的抽奖程序</title>
+<link href="css/index.css"  rel="stylesheet" />
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="jQueryRotate.2.2.js"></script>
+<script type="text/javascript" src="jquery.easing.min.js"></script>
+<script type="text/javascript">
+$(function(){ 
+     $("#start_text").click(function(){
+        lottery(); 
+    }); 
+}); 
+function lottery(){ 
+    $.ajax({ 
+        type: 'POST', 
+        url: 'json.php', 
+        dataType: 'json', 
+        cache: false, 
+        error: function(){ 
+            alert('出错了！'); 
+            return false; 
+        }, 
+        success:function(res){
+            //$("#startbtn").unbind('click').css("cursor","default");
+            var a = res.angle; //角度
+            var p = res.prize; //奖项
+            $("#startbtn").rotate({ 
+                duration:3000, //转动时间 
+                angle: 0, 
+                animateTo:1800+a, //转动角度 
+                easing: $.easing.easeOutSine, 
+                callback: function(){ 
+                    var con = confirm('恭喜你，中得'+p+'\n还要再来一次吗？'); 
+                    if(con){ 
+                        lottery(); 
+                    }else{ 
+                        return false; 
+                    } 
+                } 
+            });
+        } 
+    });
+} 
+</script>
+</head>
+
+<body>
+   <div class="demo">
+        <img id="disk" src="images/disk1.jpg" />
+        <img src="images/start2.png" id="startbtn" class="start">
+        <img src="images/start_text.png" id="start_text" class="start_text">
+   </div>
+</body>
+</html>
