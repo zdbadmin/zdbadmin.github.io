@@ -1,2 +1,2 @@
-hello word
-2222222
+<?php
+echo phpinfo();
